@@ -1,0 +1,21 @@
+{
+	"form": {
+		"fields": {
+			"name": "Jmeno",
+			"phone": "Telefon",
+			"mail": "E-mail",
+			"mainLang": "Hlavní jazyk"
+		},
+		"helpers": {
+			"requiredField": "Pole \"{{ field }}\" je povinné.",
+			"invalidField": "Pole \"{{ field }}\" není platné.",
+			"selectValue": "Vyberte hodnotu"
+		},
+		"submit": "Submit"
+	},
+	"lang": {
+		"cs": "Čeština",
+		"en": "Angličtina",
+		"sk": "Slovenština"
+	}
+}
