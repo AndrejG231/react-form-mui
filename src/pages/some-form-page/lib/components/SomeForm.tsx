@@ -122,9 +122,8 @@ export default function SomeForm() {
     const form = useForm({
         defaultValues,
         resolver: yupResolver(validationSchema),
+		mode: "onTouched",
     });
-
-    console.log(form.getValues());
 
     const handleSubmitSuccess = () => {
         form.reset();
