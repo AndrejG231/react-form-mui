@@ -1,7 +1,7 @@
 import * as Yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { Button, Paper, styled } from "@mui/material";
-import { useMemo } from "react";
+import { Button, Paper, Typography, styled } from "@mui/material";
+import { useMemo, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 
@@ -119,13 +119,18 @@ export default function SomeForm() {
         ]);
     }, [t]);
 
+    type FormValues = typeof defaultValues;
+
+    const [data, setData] = useState<null | FormValues>(null);
+
     const form = useForm({
         defaultValues,
         resolver: yupResolver(validationSchema),
-		mode: "onTouched",
+        mode: "onTouched",
     });
 
-    const handleSubmitSuccess = () => {
+    const handleSubmitSuccess = (values: FormValues) => {
+        setData(values);
         form.reset();
     };
 
@@ -142,6 +147,14 @@ export default function SomeForm() {
                     {t("form.submit")}
                 </StyledSubmitButton>
             </StyledFormPaper>
+            {data && (
+                <StyledFormPaper>
+                    <pre>
+                        <Typography>{JSON.stringify(data, null, "\t")}</Typography>
+                    </pre>
+                    <StyledSubmitButton onClick={() => setData(null)}>Clear</StyledSubmitButton>
+                </StyledFormPaper>
+            )}
         </FormProvider>
     );
 }
