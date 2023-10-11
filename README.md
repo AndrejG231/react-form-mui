@@ -1,46 +1,85 @@
-# Getting Started with Create React App
+# Simple form using [React](https://react.dev/), [MUI](https://mui.com/), [React hook form](https://react-hook-form.com/) and [Yup](https://github.com/jquense/yup)
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
-
-In the project directory, you can run:
-
 ### `yarn start`
-
 Runs the app in the development mode.\
 Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
-
 ### `yarn test`
-
 Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
 
 ### `yarn build`
-
 Builds the app for production to the `build` folder.\
 It correctly bundles React in production mode and optimizes the build for the best performance.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## Internal libraries
+### `utils/form-control`
+The Form Config module is a TypeScript library designed to simplify the configuration and management of form fields within a web application. It allows you to centralized configuration for all form fields.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+#### Types
+##### FormControl
+FormControl is a union type that represents different types of form controls.
 
-### `yarn eject`
+##### FormConfig
+`FormConfig` is an array type that defines the configuration for multiple form controls, allowing you to define the structure of your form.
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+##### SelectConfigProps\<TValue>:
+This type represents the properties that are passed to a function responsible for rendering a select input control. It's designed to provide the necessary props for rendering and managing the select input. It is specific to the value type `TValue` (e.g., `string` or `number`).
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+##### TextFieldConfigProps\<TValue>:
+This type represents the properties that are passed to a function responsible for rendering a text input control. Similar to SelectConfigProps, it is specific to the value type `TValue`.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+#### Functions
+##### createFormConfig
+Function used to create centralized form fields configuration:
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+###### Parameters:
 
-## Learn More
+`config (type: FormConfig)`: An array that defines the configuration for multiple form controls. Each element in the array should be a FormControl, representing different types of form controls.
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+###### Return Value:
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+`CreateConfigResult<Config>`: An object that contains the following properties:  
+ - `fields`: An array of form controls, mirroring the config parameter.  
+ - `defaultValues`: An object that holds default values for each form control based on the defaultValue property specified in the form configuration.
+- `validationSchema`: A Yup validation schema that combines the validation rules of individual form controls into a single schema.
+- `render`: A function that, when called, renders the form fields based on the configuration.
+
+#### Example
+Here's an example of how you can use the Form Config module to configure and manage form fields: 
+
+```
+import { createFormConfig } from 'form-config-module';
+
+// Define your form configuration
+const formConfig = [
+  {
+    inputType: 'text',
+    valueType: 'string',
+    name: 'name',
+    label: 'Name',
+  },
+  {
+    inputType: 'select',
+    valueType: 'number',
+    name: 'age',
+    label: 'Age',
+    options: [{ value: 18, label: '18' }, { value: 25, label: '25' }],
+  },
+  // Add more form controls as needed
+];
+
+// Create a form configuration object
+const configResult = createFormConfig(formConfig);
+
+// Use configResult.fields for rendering form fields
+// Use configResult.defaultValues to set default values for the form
+// Use configResult.validationSchema for Yup validation schema
+
+// Render the form fields
+const renderedFields = configResult.render();
+
+// Integrate the renderedFields into your React component
+```
